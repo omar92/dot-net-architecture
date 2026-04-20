@@ -59,3 +59,42 @@ public class HealthResponse
     [JsonPropertyName("message")]
     public string Message { get; set; } = string.Empty;
 }
+
+/// <summary>Request body for POST /api/users</summary>
+public class CreateUserRequest
+{
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
+
+    [JsonPropertyName("email")]
+    public string? Email { get; set; }
+
+    [JsonPropertyName("role")]
+    public string? Role { get; set; }
+}
+
+/// <summary>Request body for POST /api/tasks</summary>
+public class CreateTaskRequest
+{
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    [JsonPropertyName("userId")]
+    public int? UserId { get; set; }
+}
+
+/// <summary>Request body for PUT /api/tasks/{id} — all fields optional for partial updates</summary>
+public class UpdateTaskRequest
+{
+    [JsonPropertyName("title")]
+    public string? Title { get; set; }
+
+    [JsonPropertyName("status")]
+    public string? Status { get; set; }
+
+    [JsonPropertyName("userId")]
+    public int? UserId { get; set; }
+}

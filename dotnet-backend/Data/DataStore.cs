@@ -111,4 +111,66 @@ public class DataStore
             _lock.ExitReadLock();
         }
     }
+
+    /// <summary>
+    /// Creates a new user. Returns null if the email is already in use.
+    /// </summary>
+    public User CreateUser(string name, string email, string role)
+    {
+        _lock.EnterWriteLock();
+        try
+        {
+            var newId = _users.Count > 0 ? _users.Max(u => u.Id) + 1 : 1;
+            var user = new User { Id = newId, Name = name, Email = email, Role = role };
+            _users.Add(user);
+            return user;
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
+    }
+
+    /// <summary>
+    /// Creates a new task. Caller must validate userId exists before calling.
+    /// </summary>
+    public TaskItem CreateTask(string title, string status, int userId)
+    {
+        _lock.EnterWriteLock();
+        try
+        {
+            var newId = _tasks.Count > 0 ? _tasks.Max(t => t.Id) + 1 : 1;
+            var task = new TaskItem { Id = newId, Title = title, Status = status, UserId = userId };
+            _tasks.Add(task);
+            return task;
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
+    }
+
+    /// <summary>
+    /// Partially updates a task. Returns the updated task, or null if not found.
+    /// Only non-null fields are applied.
+    /// </summary>
+    public TaskItem? UpdateTask(int id, string? title, string? status, int? userId)
+    {
+        _lock.EnterWriteLock();
+        try
+        {
+            var task = _tasks.FirstOrDefault(t => t.Id == id);
+            if (task is null) return null;
+
+            if (title is not null) task.Title = title;
+            if (status is not null) task.Status = status;
+            if (userId is not null) task.UserId = userId.Value;
+
+            return task;
+        }
+        finally
+        {
+            _lock.ExitWriteLock();
+        }
+    }
 }
